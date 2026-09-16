@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI20k Study Assistant - CP2 Mock</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <section class="card">
+
+            <div class="badge">CP2 MOCK PROTOTYPE</div>
+
+            <h1>Trợ lý học viên AI20k</h1>
+
+            <p class="description">
+                Hỏi về nội dung bài học của khóa AI20k.
+                Trợ lý chỉ trả lời khi có đủ căn cứ.
+            </p>
+
+            <div class="example">
+                Ví dụ:
+                <button onclick="setExample('ReAct Agent là gì?')">
+                    ReAct Agent là gì?
+                </button>
+
+                <button onclick="setExample('cái này là sao?')">
+                    Câu hỏi mơ hồ
+                </button>
+            </div>
+
+            <label for="question">
+                Câu hỏi của bạn
+            </label>
+
+            <textarea
+                id="question"
+                placeholder="Ví dụ: ReAct Agent là gì?"
+                rows="4"
+            ></textarea>
+
+            <button
+                id="sendButton"
+                class="primary-button"
+                onclick="askQuestion()"
+            >
+                Gửi câu hỏi
+            </button>
+
+            <div id="result" class="result hidden"></div>
+
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
