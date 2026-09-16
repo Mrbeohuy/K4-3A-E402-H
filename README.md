@@ -13,8 +13,8 @@
 E402
 
 ## Track
-Chưa chốt
+B — Trợ lý Discord / Trợ lý Học viên
 
 ## Đội trưởng
-- Họ tên: [Tên của bạn]
-- Mã học viên: [Mã học viên]
+- Họ tên: Nguyễn Trọng Huy
+- Mã học viên: 2A202602379

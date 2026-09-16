@@ -8,12 +8,21 @@ Hướng: [ ] A — VLearn  [ ] B — Trợ lý Học viên  [ ] C — Làn mở
 Loại: [ ] Tối ưu tính năng có sẵn  [ ] Tính năng mới
 
 ## §1. User & Job
-- Job executor + workflow (đính kèm worksheet JTBD / ảnh sơ đồ):
-- Core JTBD (không tên sản phẩm/AI trong câu):
-- Problem statement (KHÔNG chữ AI):
-- Evidence (chuẩn A và/hoặc B — log đầy đủ trong repo):
-  - Số liệu mining / kết quả khảo sát (n = ?, % xác nhận):
-  - ≥5 quote/ví dụ nguyên văn + nguồn:
+
+- Job executor:
+  Học viên AI20k đang học hoặc ôn lại bài và cần tìm câu trả lời
+  cho một câu hỏi liên quan đến nội dung khóa học.
+
+- Problem statement:
+  Học viên khi có câu hỏi về nội dung bài học phải tự tìm lại
+  slide, video, tin nhắn Discord hoặc chờ người khác trả lời;
+  nếu không biết thông tin nằm ở đâu, việc tìm câu trả lời có thể
+  mất thời gian và làm gián đoạn quá trình học.
+
+- Evidence:
+  - CP1: đang thu khảo sát.
+  - Evidence 1: [quote thật]
+  - Evidence 2: [quote thật]
 
 ## §2. Impact & quyết định chọn
 - Bảng impact ≥3 ứng viên (bao nhiêu người · tần suất · tốn gì mỗi lần · khả thi):
@@ -25,13 +34,19 @@ Loại: [ ] Tối ưu tính năng có sẵn  [ ] Tính năng mới
 - [Sản phẩm 2]: ...
 
 ## §4. Thiết kế
-- Lát cắt MỘT CÂU (1 user · 1 việc · 1 quyết định AI · 1 kết quả):
-- Non-goals (≥3 thứ KHÔNG build):
-- Mức prototype nhắm tới: [ ] Sketch [ ] Mock [ ] Working — phần nào mock, phần nào thật:
-- Automation: [ ] augment [ ] conditional [ ] automate — lý do theo cost-of-error:
-- §4b. Nguyên tắc đã áp dụng (≥4 — HAX/PAIR, xem guide):
-  | Nguyên tắc | Áp cụ thể vào đâu trong prototype |
-  |---|---|
+
+- Lát cắt MỘT CÂU:
+  Với một học viên AI20k đang cần giải đáp một câu hỏi về nội dung
+  khóa học, AI quyết định câu hỏi có đủ căn cứ để trả lời hay không
+  và trả lời kèm nguồn hoặc yêu cầu làm rõ, để học viên biết được
+  câu trả lời hoặc bước tiếp theo mà không phải tự dò nhiều nguồn.
+
+- Mức prototype nhắm tới:
+  Mock.
+
+- Automation:
+  Conditional — chỉ tự trả lời khi có căn cứ phù hợp; câu hỏi mơ hồ
+  hoặc không có căn cứ thì yêu cầu làm rõ.
 
 ## §5. Kiểu lỗi — 4 lớp chỗ khó + kịch bản (≥8) [bảng theo guide §2.5]
 
