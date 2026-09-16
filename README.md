@@ -4,7 +4,7 @@
 
 | Họ và tên | Mã học viên | Vai trò chính | Phần việc đảm nhiệm |
 |---|---|---|---|
-| [Tên của bạn] | [Mã học viên] | Product / Developer | Evidence, Spec, Prototype, Prompt, Evaluation, Demo |
+| Nguyễn Trọng Huy | 2A202602379 | Product / Developer | Evidence, Spec, Prototype, Prompt, Evaluation, Demo |
 
 ## Lớp
 3A
