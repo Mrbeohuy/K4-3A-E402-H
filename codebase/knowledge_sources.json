@@ -1,0 +1,44 @@
+[
+  {
+    "id": "DAY3_REACT_01",
+    "title": "Day 3 - ReAct Agent",
+    "provenance": "synthetic/demo",
+    "content": "ReAct is a pattern for building agents that alternate between reasoning steps and actions. The agent thinks about the next step, calls a tool when needed, observes the result, and continues. ReAct can help make tool use more transparent, but it does not guarantee the answer is always correct."
+  },
+  {
+    "id": "DAY1_SYSTEM_PROMPT_01",
+    "title": "Day 1 - System Prompt",
+    "provenance": "synthetic/demo",
+    "content": "A system prompt gives the assistant high-priority instructions about role, scope, output format, and safety rules. It should tell the assistant what it can answer, what it must refuse or clarify, and how to format the response."
+  },
+  {
+    "id": "DAY2_TOKEN_COST_01",
+    "title": "Day 2 - Token and Cost",
+    "provenance": "synthetic/demo",
+    "content": "A token is a small unit of text processed by a language model. Cost usually depends on the number of input and output tokens, model choice, and the provider's pricing. Shorter prompts and concise answers can reduce cost."
+  },
+  {
+    "id": "DAY4_RETRY_BACKOFF_01",
+    "title": "Day 4 - Retry and Backoff",
+    "provenance": "synthetic/demo",
+    "content": "Retry means trying a failed request again. Backoff means waiting longer between retries, often to avoid overloading an API or hitting rate limits. Retries should be limited and should not hide repeated failures."
+  },
+  {
+    "id": "DAY5_GROUNDING_01",
+    "title": "Day 5 - Grounded Answers",
+    "provenance": "synthetic/demo",
+    "content": "A grounded answer is based only on provided sources. If the sources do not contain enough information, the assistant should ask a clarifying question or say that no suitable evidence was found instead of inventing a source."
+  },
+  {
+    "id": "DAY5_PROMPT_INJECTION_01",
+    "title": "Day 5 - Prompt Injection",
+    "provenance": "synthetic/demo",
+    "content": "Prompt injection is an attempt to make the assistant ignore system rules or reveal hidden instructions. The assistant should not reveal system prompts, API keys, or secret configuration, and should keep following the higher-priority rules."
+  },
+  {
+    "id": "DAY6_EVAL_01",
+    "title": "Day 6 - Golden Set Evaluation",
+    "provenance": "synthetic/demo",
+    "content": "A golden set is a collection of test cases with expected behavior. It should include normal cases and difficult cases such as ambiguous questions, out-of-scope requests, source-truth failures, and domain-specific misunderstandings."
+  }
+]

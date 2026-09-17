@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AI20k Study Assistant - CP2 Mock</title>
+    <title>AI20k Study Assistant - CP3</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -15,23 +15,27 @@
 
         <section class="card">
 
-            <div class="badge">CP2 MOCK PROTOTYPE</div>
+            <div class="badge">CP3 — BACKEND AI DECISION</div>
 
             <h1>Trợ lý học viên AI20k</h1>
 
             <p class="description">
                 Hỏi về nội dung bài học của khóa AI20k.
-                Trợ lý chỉ trả lời khi có đủ căn cứ.
+                Khi backend có GEMINI_API_KEY, quyết định trung tâm do Gemini thực hiện.
             </p>
 
             <div class="example">
                 Ví dụ:
-                <button onclick="setExample('ReAct Agent là gì?')">
-                    ReAct Agent là gì?
+                <button onclick="setExample('LLM hoạt động như thế nào?')">
+                    LLM hoạt động như thế nào?
                 </button>
 
                 <button onclick="setExample('cái này là sao?')">
                     Câu hỏi mơ hồ
+                </button>
+
+                <button onclick="setExample('Hướng dẫn tôi làm bánh mì')">
+                    Ngoài phạm vi
                 </button>
             </div>
 
@@ -41,7 +45,7 @@
 
             <textarea
                 id="question"
-                placeholder="Ví dụ: ReAct Agent là gì?"
+                placeholder="Ví dụ: LLM hoạt động như thế nào?"
                 rows="4"
             ></textarea>
 
