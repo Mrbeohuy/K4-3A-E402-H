@@ -16,6 +16,30 @@ MAX_CONTENT_CHARS = 1200
 DEFAULT_TOP_K = 5
 MIN_RETRIEVAL_SCORE = 1.8
 
+QUERY_ALIASES = {
+    "llm": ("mo", "hinh", "ngon", "ngu", "lon"),
+    "attention": ("chu",),
+}
+
+DEFINITION_MARKERS = (
+    " la ",
+    " la mot ",
+    " co nghia la ",
+    " duoc goi la ",
+    " goi la ",
+    " don vi ",
+    " thuat ngu ",
+    " can nam duoc ",
+    " khong phai ",
+)
+
+STRONG_DEFINITION_MARKERS = (
+    " co nghia la ",
+    " don vi ",
+    " thuat ngu ",
+    " can nam duoc ",
+)
+
 STOPWORDS = {
     "a",
     "ai",
@@ -141,7 +165,7 @@ class ScoredSource:
 
 
 def _strip_accents(text):
-    text = text.lower().replace("đ", "d").replace("Đ", "D")
+    text = text.lower().replace("\u0111", "d").replace("\u0110", "d")
     normalized = unicodedata.normalize("NFD", text)
     return "".join(char for char in normalized if unicodedata.category(char) != "Mn")
 
@@ -164,6 +188,16 @@ def _unique_tokens(tokens):
         seen.add(token)
         unique.append(token)
     return unique
+
+
+def _expanded_query_tokens(tokens):
+    expanded = []
+    for token in tokens:
+        expanded.append(token)
+        expanded.extend(QUERY_ALIASES.get(token, ()))
+    return _unique_tokens(
+        token for token in expanded if len(token) > 1 and token not in STOPWORDS
+    )
 
 
 def _shorten(text, max_chars=MAX_CONTENT_CHARS):
@@ -254,6 +288,7 @@ def load_vlearn_sources():
 def _source_score(query_tokens, query_text, source):
     if not query_tokens:
         return 0.0
+    original_query_tokens = _unique_tokens(_tokens(query_text))
 
     source_text = f"{source['title']} {source['content']}"
     source_tokens = _tokens(source_text)
@@ -264,10 +299,22 @@ def _source_score(query_tokens, query_text, source):
     for token in source_tokens:
         token_counts[token] = token_counts.get(token, 0) + 1
 
+    matched_query_tokens = [token for token in query_tokens if token in token_counts]
+    if len(query_tokens) >= 2 and len(set(matched_query_tokens)) < 2:
+        return 0.0
+
     score = 0.0
-    for token in query_tokens:
-        if token in token_counts:
-            score += 1.0 + min(token_counts[token], 3) * 0.25
+    for token in matched_query_tokens:
+        weight = 1.0 if token in original_query_tokens else 0.45
+        score += weight * (1.0 + min(token_counts[token], 3) * 0.25)
+
+    matched_original_tokens = [
+        token for token in original_query_tokens if token in token_counts
+    ]
+    if len(original_query_tokens) >= 2 and len(set(matched_original_tokens)) >= 2:
+        score += 4.0
+    elif matched_original_tokens:
+        score += 1.0
 
     normalized_source = _strip_accents(source_text)
     normalized_query = _strip_accents(query_text)
@@ -279,11 +326,68 @@ def _source_score(query_tokens, query_text, source):
         if phrase in normalized_source:
             score += 1.5
 
+    score += _proximity_score(query_tokens, source_tokens)
+    score += _definition_score(query_tokens, normalized_source)
+
+    if "data/vlearn-pack/transcript/" in source.get("provenance", ""):
+        score += 0.2
+
     return score
 
 
+def _proximity_score(query_tokens, source_tokens):
+    wanted = set(query_tokens)
+    if len(wanted) < 2:
+        return 0.0
+
+    positions = [
+        (index, token) for index, token in enumerate(source_tokens) if token in wanted
+    ]
+    best_window = None
+    for left_index, (left_position, left_token) in enumerate(positions):
+        seen = {left_token}
+        for right_position, right_token in positions[left_index + 1 :]:
+            seen.add(right_token)
+            if len(seen) >= 2:
+                window = right_position - left_position
+                if best_window is None or window < best_window:
+                    best_window = window
+                break
+
+    if best_window is None:
+        return 0.0
+    if best_window <= 8:
+        return 2.5
+    if best_window <= 20:
+        return 1.5
+    if best_window <= 40:
+        return 0.75
+    return 0.0
+
+
+def _definition_score(query_tokens, normalized_source):
+    best = 0.0
+    for sentence in re.split(r"[\n.!?]+", normalized_source):
+        if not sentence.strip():
+            continue
+        matched_terms = [
+            token
+            for token in query_tokens
+            if re.search(rf"\b{re.escape(token)}\b", sentence)
+        ]
+        if not matched_terms:
+            continue
+        padded_sentence = f" {sentence} "
+        if any(marker in padded_sentence for marker in DEFINITION_MARKERS):
+            marker_bonus = 1.0
+            if any(marker in padded_sentence for marker in STRONG_DEFINITION_MARKERS):
+                marker_bonus += 2.0
+            best = max(best, marker_bonus + min(len(set(matched_terms)), 3) * 0.6)
+    return best
+
+
 def retrieve_sources(question, top_k=DEFAULT_TOP_K):
-    query_tokens = _unique_tokens(_tokens(question))
+    query_tokens = _expanded_query_tokens(_tokens(question))
     if not query_tokens:
         return []
 

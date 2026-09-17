@@ -38,6 +38,34 @@ class LocalDataTest(unittest.TestCase):
         self.assertLessEqual(len(sources), 5)
         self.assertTrue(all(source["id"].startswith("VLEARN_") for source in sources))
 
+    def test_token_definition_sources_are_loaded(self):
+        source_ids = {source["id"] for source in load_vlearn_sources()}
+
+        self.assertIn("VLEARN_T04_SEG_049", source_ids)
+        self.assertIn("VLEARN_T06_SEG_134", source_ids)
+
+    def test_token_question_retrieves_definition_source(self):
+        sources = retrieve_sources("token trong LLM là gì?", top_k=5)
+        source_ids = {source["id"] for source in sources}
+
+        self.assertTrue({"VLEARN_T04_SEG_049", "VLEARN_T06_SEG_134"} & source_ids)
+
+    def test_core_retrieval_regression_queries(self):
+        should_retrieve = [
+            "LLM hoạt động như thế nào?",
+            "context window là gì?",
+            "self-attention là gì?",
+        ]
+
+        for query in should_retrieve:
+            with self.subTest(query=query):
+                sources = retrieve_sources(query, top_k=5)
+                self.assertGreater(len(sources), 0)
+                self.assertLessEqual(len(sources), 5)
+
+        self.assertEqual(retrieve_sources("Hướng dẫn tôi làm bánh mì", top_k=5), [])
+        self.assertEqual(retrieve_sources("cái này là sao?", top_k=5), [])
+
     def test_ambiguous_query_does_not_retrieve_context(self):
         self.assertEqual(retrieve_sources("cai nay la sao?", top_k=5), [])
 
